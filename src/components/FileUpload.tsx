@@ -46,6 +46,9 @@ const FileUpload = () => {
         });
         setIsProcessing(true);
 
+        let successCount = 0;
+        let failedCount = 0;
+
         for (const query of queries) {
           try {
             const response = await fetch('https://factory.wearegenial.com/api/external/agents/cm3ishkqf01t00pt31jggcwht/query', {
@@ -62,17 +65,19 @@ const FileUpload = () => {
               throw new Error('API request failed');
             }
 
+            successCount++;
             setStatus(prev => ({
               ...prev,
               processed: prev.processed + 1,
-              success: prev.success + 1,
+              success: successCount,
             }));
           } catch (error) {
             console.error('Error processing query:', query, error);
+            failedCount++;
             setStatus(prev => ({
               ...prev,
               processed: prev.processed + 1,
-              failed: prev.failed + 1,
+              failed: failedCount,
             }));
           }
         }
@@ -80,7 +85,7 @@ const FileUpload = () => {
         setIsProcessing(false);
         toast({
           title: "Processing Complete",
-          description: `Successfully processed ${status.success} queries with ${status.failed} failures.`,
+          description: `Successfully processed ${successCount} queries with ${failedCount} failures.`,
         });
       } catch (error) {
         console.error('Error reading file:', error);
