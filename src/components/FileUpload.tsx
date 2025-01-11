@@ -56,10 +56,10 @@ const FileUpload = () => {
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }) as any[][];
 
-        // Improved empty row filtering
+        // Skip the first row (header) and filter empty rows
         const queries = rows
+          .slice(1) // Skip header row
           .filter(row => {
-            // Check if row exists and has at least one non-empty cell
             return row && 
                    Array.isArray(row) && 
                    row.some(cell => cell !== null && cell !== undefined && cell.toString().trim() !== '');
@@ -207,6 +207,9 @@ const FileUpload = () => {
               </h3>
               <p className="text-sm text-muted-foreground">
                 Drag and drop your Excel file here, or click to select
+              </p>
+              <p className="text-xs text-muted-foreground italic">
+                Note: The first line of the file must be a header row
               </p>
             </div>
           </div>
