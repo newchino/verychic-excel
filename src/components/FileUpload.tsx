@@ -32,9 +32,14 @@ const FileUpload = () => {
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }) as any[][];
 
-        // Filter out empty rows and convert entire row to string
+        // Improved empty row filtering
         const queries = rows
-          .filter(row => row.length > 0 && row.some(cell => cell != null))
+          .filter(row => {
+            // Check if row exists and has at least one non-empty cell
+            return row && 
+                   Array.isArray(row) && 
+                   row.some(cell => cell !== null && cell !== undefined && cell.toString().trim() !== '');
+          })
           .map(row => row.map(cell => cell?.toString() || '').join(' ').trim())
           .filter(query => query.length > 0);
 
