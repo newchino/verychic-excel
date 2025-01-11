@@ -15,7 +15,7 @@ const ProcessingStatus = ({ status }: ProcessingStatusProps) => {
     <div className="mt-8 space-y-4">
       <div className="flex flex-col items-center justify-center space-y-4">
         <FileSpreadsheet className="w-16 h-16 text-primary animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
-        <p className="text-sm text-muted-foreground">Processing your file...</p>
+        <p className="text-sm text-muted-foreground">Rédaction en cours...</p>
       </div>
       <Progress value={(status.processed / status.total) * 100} />
       <div className="grid grid-cols-3 gap-4">

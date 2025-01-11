@@ -15,12 +15,12 @@ const CompletionStatus = ({ status, processingTime, onReset }: CompletionStatusP
     <div className="space-y-6 text-center">
       <div className="space-y-2">
         <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto" />
-        <h3 className="text-lg font-semibold">Traitement terminé</h3>
+        <h3 className="text-lg font-semibold">Rédaction terminée</h3>
         <p className="text-sm text-muted-foreground">
-          {status.success} requêtes traitées avec succès et {status.failed} échecs
+          {status.success} {status.success <= 1 ? "fiche rédigée" : "fiches rédigées"} avec succès et {status.failed} {status.failed <= 1 ? "échec" : "échecs"}
         </p>
         <p className="text-sm text-muted-foreground">
-          Temps de traitement: {processingTime}
+          Temps de rédaction : {processingTime}
         </p>
       </div>
       <div className="flex justify-center gap-4">

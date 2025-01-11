@@ -8,11 +8,11 @@ const Index = () => {
           <img 
             src="/lovable-uploads/f88625c4-aa8c-4bd4-a5f2-b2e25bf4888b.png" 
             alt="Verychic Logo" 
-            className="h-8 mx-auto mb-4"
+            className="h-13 mx-auto mb-4"
           />
-          <h1 className="text-4xl font-bold tracking-tight">Créateur fiche produit</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Rédacteur de fiches produits</h1>
           <p className="text-lg text-muted-foreground">
-            Uploadez votre fichier Excel pour lancer la génération des fiches produits
+            Rédigez vos fiches produits en un temps record grâce à la puissance de l'IA.
           </p>
         </div>
         <FileUpload />

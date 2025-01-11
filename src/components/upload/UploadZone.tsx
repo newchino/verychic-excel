@@ -16,7 +16,7 @@ const UploadZone = ({ getInputProps, getRootProps, isDragActive, isProcessing }:
       className={cn(
         "border-2 border-dashed rounded-lg p-12 transition-all duration-200 ease-in-out",
         "hover:border-primary/50 hover:bg-accent/50",
-        isDragActive ? "border-primary bg-accent" : "border-muted",
+        isDragActive ? "border-primary bg-accent" : "border-accent",
         isProcessing ? "pointer-events-none opacity-50" : "cursor-pointer"
       )}
     >
@@ -25,13 +25,13 @@ const UploadZone = ({ getInputProps, getRootProps, isDragActive, isProcessing }:
         <Upload className="w-12 h-12 text-muted-foreground" />
         <div className="space-y-2">
           <h3 className="font-semibold text-lg">
-            {isDragActive ? "Drop the file here" : "Upload Excel File"}
+            {isDragActive ? "Déposez votre fichier ici" : "Uploadez votre fichier Excel"}
           </h3>
           <p className="text-sm text-muted-foreground">
-            Drag and drop your Excel file here, or click to select
+            Glissez-déposez votre fichier Excel ici, ou cliquez pour le sélectionner
           </p>
           <p className="text-xs text-muted-foreground italic">
-            Note: The first line of the file must be a header row
+            Note: La première ligne du fichier doit être une ligne d'en-tête
           </p>
         </div>
       </div>
