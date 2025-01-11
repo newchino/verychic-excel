@@ -30,10 +30,12 @@ const FileUpload = () => {
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }) as string[][];
+        const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }) as any[][];
 
-        // Filter out empty rows and get text from first column
-        const queries = rows.filter(row => row.length > 0 && row[0]).map(row => row[0]);
+        // Filter out empty rows and ensure values are strings
+        const queries = rows
+          .filter(row => row.length > 0 && row[0] != null)
+          .map(row => String(row[0]));
 
         setStatus({
           total: queries.length,
@@ -53,7 +55,11 @@ const FileUpload = () => {
               body: JSON.stringify({ query }),
             });
 
-            if (!response.ok) throw new Error('API request failed');
+            if (!response.ok) {
+              const errorData = await response.json();
+              console.error('API Error:', errorData);
+              throw new Error('API request failed');
+            }
 
             setStatus(prev => ({
               ...prev,
