@@ -184,32 +184,34 @@ const FileUpload = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <div
-        {...getRootProps()}
-        className={cn(
-          "border-2 border-dashed rounded-lg p-12 transition-all duration-200 ease-in-out",
-          "hover:border-primary/50 hover:bg-accent/50",
-          isDragActive ? "border-primary bg-accent" : "border-muted",
-          isProcessing ? "pointer-events-none opacity-50" : "cursor-pointer"
-        )}
-      >
-        <input {...getInputProps()} />
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          {isProcessing ? (
-            <FileSpreadsheet className="w-12 h-12 text-muted-foreground animate-pulse" />
-          ) : (
-            <Upload className="w-12 h-12 text-muted-foreground" />
+      {!isProcessing && (
+        <div
+          {...getRootProps()}
+          className={cn(
+            "border-2 border-dashed rounded-lg p-12 transition-all duration-200 ease-in-out",
+            "hover:border-primary/50 hover:bg-accent/50",
+            isDragActive ? "border-primary bg-accent" : "border-muted",
+            isProcessing ? "pointer-events-none opacity-50" : "cursor-pointer"
           )}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-lg">
-              {isDragActive ? "Drop the file here" : "Upload Excel File"}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Drag and drop your Excel file here, or click to select
-            </p>
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            {isProcessing ? (
+              <FileSpreadsheet className="w-12 h-12 text-muted-foreground animate-pulse" />
+            ) : (
+              <Upload className="w-12 h-12 text-muted-foreground" />
+            )}
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">
+                {isDragActive ? "Drop the file here" : "Upload Excel File"}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Drag and drop your Excel file here, or click to select
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {isProcessing && (
         <div className="mt-8 space-y-4">
