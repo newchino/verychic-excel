@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, FileSpreadsheet, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ProcessingStatus {
   total: number;
@@ -15,6 +16,7 @@ interface ProcessingStatus {
 
 const FileUpload = () => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const [status, setStatus] = useState<ProcessingStatus>({
     total: 0,
     processed: 0,
@@ -22,6 +24,17 @@ const FileUpload = () => {
     failed: 0,
   });
   const { toast } = useToast();
+
+  const resetUploader = () => {
+    setIsComplete(false);
+    setIsProcessing(false);
+    setStatus({
+      total: 0,
+      processed: 0,
+      success: 0,
+      failed: 0,
+    });
+  };
 
   const processExcelFile = async (file: File) => {
     const reader = new FileReader();
@@ -88,16 +101,17 @@ const FileUpload = () => {
         }
 
         setIsProcessing(false);
+        setIsComplete(true);
         toast({
-          title: "Processing Complete",
-          description: `Successfully processed ${successCount} queries with ${failedCount} failures.`,
+          title: "Traitement terminé",
+          description: `${successCount} requêtes traitées avec succès et ${failedCount} échecs.`,
         });
       } catch (error) {
         console.error('Error reading file:', error);
         toast({
           variant: "destructive",
-          title: "Error",
-          description: "Failed to read the Excel file. Please ensure it's a valid Excel file.",
+          title: "Erreur",
+          description: "Impossible de lire le fichier Excel. Assurez-vous qu'il s'agit d'un fichier Excel valide.",
         });
         setIsProcessing(false);
       }
@@ -120,6 +134,28 @@ const FileUpload = () => {
     },
     multiple: false,
   });
+
+  if (isComplete) {
+    return (
+      <div className="space-y-6 text-center">
+        <div className="space-y-2">
+          <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto" />
+          <h3 className="text-lg font-semibold">Traitement terminé</h3>
+          <p className="text-sm text-muted-foreground">
+            {status.success} requêtes traitées avec succès et {status.failed} échecs
+          </p>
+        </div>
+        <div className="flex justify-center gap-4">
+          <Button variant="outline" onClick={resetUploader}>
+            Uploadez nouveau fichier
+          </Button>
+          <Button onClick={() => window.open('https://factory.wearegenial.com/logs', '_blank')}>
+            Voir les fiches produits
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
