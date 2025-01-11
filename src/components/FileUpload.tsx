@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, FileSpreadsheet, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import confetti from 'canvas-confetti';
 
 interface ProcessingStatus {
   total: number;
@@ -17,6 +18,7 @@ interface ProcessingStatus {
 const FileUpload = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [processingTime, setProcessingTime] = useState<string>('');
   const [status, setStatus] = useState<ProcessingStatus>({
     total: 0,
     processed: 0,
@@ -28,6 +30,7 @@ const FileUpload = () => {
   const resetUploader = () => {
     setIsComplete(false);
     setIsProcessing(false);
+    setProcessingTime('');
     setStatus({
       total: 0,
       processed: 0,
@@ -36,7 +39,15 @@ const FileUpload = () => {
     });
   };
 
+  const formatDuration = (startTime: number) => {
+    const duration = Math.floor((Date.now() - startTime) / 1000); // duration in seconds
+    const minutes = Math.floor(duration / 60);
+    const seconds = duration % 60;
+    return `${minutes}m ${seconds}s`;
+  };
+
   const processExcelFile = async (file: File) => {
+    const startTime = Date.now();
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
@@ -102,6 +113,17 @@ const FileUpload = () => {
 
         setIsProcessing(false);
         setIsComplete(true);
+        const duration = formatDuration(startTime);
+        setProcessingTime(duration);
+
+        if (failedCount === 0) {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+
         toast({
           title: "Traitement terminé",
           description: `${successCount} requêtes traitées avec succès et ${failedCount} échecs.`,
@@ -143,6 +165,9 @@ const FileUpload = () => {
           <h3 className="text-lg font-semibold">Traitement terminé</h3>
           <p className="text-sm text-muted-foreground">
             {status.success} requêtes traitées avec succès et {status.failed} échecs
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Temps de traitement: {processingTime}
           </p>
         </div>
         <div className="flex justify-center gap-4">
