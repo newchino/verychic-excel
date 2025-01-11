@@ -17,12 +17,12 @@ const Index = () => {
         </div>
         <FileUpload />
       </div>
-      <div className="mt-16 text-center">
-        <p className="text-sm text-muted-foreground mb-2">Powered by</p>
+      <div className="mt-16 flex items-center justify-center gap-2">
+        <p className="text-sm text-muted-foreground">Powered by</p>
         <img 
           src="/lovable-uploads/39543920-c875-4be1-84e5-36faaab22346.png" 
           alt="Genial Logo" 
-          className="h-8 mx-auto"
+          className="h-8"
         />
       </div>
     </div>
