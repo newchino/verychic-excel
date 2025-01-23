@@ -1,5 +1,6 @@
 import { FileSpreadsheet, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { PuffLoader } from 'react-spinners';
 
 interface ProcessingStatusProps {
   status: {
@@ -14,8 +15,16 @@ const ProcessingStatus = ({ status }: ProcessingStatusProps) => {
   return (
     <div className="mt-8 space-y-4">
       <div className="flex flex-col items-center justify-center space-y-4">
-        <FileSpreadsheet className="w-16 h-16 text-primary animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
-        <p className="text-sm text-muted-foreground">Rédaction en cours...</p>
+        <div className="relative">
+          <PuffLoader
+            color="#000000"
+            size={80}
+            className="opacity-20"
+          />
+        </div>
+        <p className="text-sm text-muted-foreground after:content-['.'] after:animate-[ellipsis_1.5s_steps(3,end)_infinite] after:w-4 after:inline-block">
+          Rédaction en cours
+        </p>
       </div>
       <Progress value={(status.processed / status.total) * 100} />
       <div className="grid grid-cols-3 gap-4">

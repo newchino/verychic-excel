@@ -84,7 +84,13 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				ellipsis: {
+					'0%': { content: '""' },
+					'33%': { content: '"."' },
+					'66%': { content: '".."' },
+					'100%': { content: '"..."' }
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
