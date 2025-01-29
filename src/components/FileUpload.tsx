@@ -83,7 +83,7 @@ const FileUpload = () => {
         let successCount = 0;
         let failedCount = 0;
 
-        for (const query of queries) {
+        const apiCalls = queries.map(async (query) => {
           try {
             const agentId = getAgentId(query);
             const response = await fetch(`https://factory.wearegenial.com/api/external/agents/${agentId}/query`, {
@@ -113,7 +113,9 @@ const FileUpload = () => {
               failed: failedCount,
             }));
           }
-        }
+        });
+
+        await Promise.all(apiCalls);
 
         setIsProcessing(false);
         setIsComplete(true);
