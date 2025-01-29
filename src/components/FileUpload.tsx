@@ -45,6 +45,13 @@ const FileUpload = () => {
     return `${minutes}m ${seconds}s`;
   };
 
+  const getAgentId = (query: string) => {
+    if (query.includes('GOLD')) return 'cm6ie78ct01fgd8l478h9fqxv';
+    if (query.includes('SILVER')) return 'cm6idqfls01f1d8l45plb9ond';
+    if (query.includes('BRONZE')) return 'cm6ibrs8d01emd8l4dni57r2t';
+    return 'cm6ie78ct01fgd8l478h9fqxv'; // Default to GOLD if no match
+  };
+
   const processExcelFile = async (file: File) => {
     const startTime = Date.now();
     const reader = new FileReader();
@@ -78,7 +85,8 @@ const FileUpload = () => {
 
         for (const query of queries) {
           try {
-            const response = await fetch('https://factory.wearegenial.com/api/external/agents/cm3ishkqf01t00pt31jggcwht/query', {
+            const agentId = getAgentId(query);
+            const response = await fetch(`https://factory.wearegenial.com/api/external/agents/${agentId}/query`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
