@@ -60,7 +60,19 @@ const FileUpload = () => {
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }) as any[][];
+        const rawRows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 }) as any[][];
+        
+        // Filter out specified columns
+        const excludedColumns = ['Issue Id', 'Issue Key', 'Form Last Updated', 'Form Status'];
+        const headerRow = rawRows[0];
+        const excludedIndices = headerRow.reduce((indices: number[], col: string, index: number) => {
+          if (excludedColumns.includes(col)) indices.push(index);
+          return indices;
+        }, []);
+        
+        const rows = rawRows.map(row => 
+          row.filter((_: any, index: number) => !excludedIndices.includes(index))
+        );
 
         const queries = rows
           .slice(1)
@@ -98,6 +110,14 @@ const FileUpload = () => {
               throw new Error('API request failed');
             }
 
+            const data = await response.json();
+            
+            // Check if response contains "Je suis désolé,"
+            console.log('Agent response:', data.answer);
+            if (data.answer && data.answer.toLowerCase().includes('je suis désolé')) {
+              throw new Error('Agent returned an apology response');
+            }
+
             successCount++;
             setStatus(prev => ({
               ...prev,
@@ -107,7 +127,7 @@ const FileUpload = () => {
           } catch (error) {
             console.error('Error processing query:', query, error);
             failedCount++;
-            setStatus(prev => ({
+            setStatus(prev => ({  
               ...prev,
               processed: prev.processed + 1,
               failed: failedCount,
